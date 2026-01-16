@@ -27,6 +27,7 @@ const createUserRoutes = require('../presentation/routes/userRoutes');
 const createProjectRoutes = require('../presentation/routes/projectRoutes');
 const createTaskRoutes = require('../presentation/routes/taskRoutes');
 const createDashboardRoutes = require('../presentation/routes/dashboardRoutes');
+const createAuditLogRoutes = require('../presentation/routes/auditLogRoutes');
 
 // Validators
 const authValidators = require('../presentation/validators/authValidators');
@@ -161,6 +162,16 @@ class AppFactory {
       createDashboardRoutes({
         dashboardController: controllerFactory.getDashboardController(),
         authMiddleware: authMiddlewareInstance,
+      })
+    );
+
+    // Audit Log Routes
+    apiRouter.use(
+      '/audit',
+      createAuditLogRoutes({
+        auditLogController: controllerFactory.getAuditLogController(),
+        authMiddleware: authMiddlewareInstance,
+        roleMiddleware,
       })
     );
 
