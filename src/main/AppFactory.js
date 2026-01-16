@@ -18,10 +18,12 @@ const ControllerFactory = require('./factories/controllerFactory');
 // Middleware
 const validationMiddleware = require('../presentation/middlewares/validationMiddleware');
 const authMiddleware = require('../presentation/middlewares/authMiddleware');
+const { roleMiddleware } = require('../presentation/middlewares/roleMiddleware');
 const errorHandlerMiddleware = require('../presentation/middlewares/errorHandlerMiddleware');
 
 // Routes
 const createAuthRoutes = require('../presentation/routes/authRoutes');
+const createUserRoutes = require('../presentation/routes/userRoutes');
 
 // Validators
 const authValidators = require('../presentation/validators/authValidators');
@@ -111,6 +113,17 @@ class AppFactory {
         authMiddleware: authMiddlewareInstance,
         validationMiddleware,
         authValidators,
+      })
+    );
+
+    // User Routes
+    apiRouter.use(
+      '/users',
+      createUserRoutes({
+        userController: controllerFactory.getUserController(),
+        authMiddleware: authMiddlewareInstance,
+        roleMiddleware,
+        validationMiddleware,
       })
     );
 

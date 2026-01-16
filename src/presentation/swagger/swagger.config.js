@@ -61,11 +61,67 @@ const options = {
           },
         },
       },
+      responses: {
+        BadRequest: {
+          description: 'Bad request - validation error',
+          content: {
+            'application/json': {
+              schema: {
+                $ref: '#/components/schemas/Error',
+              },
+            },
+          },
+        },
+        Unauthorized: {
+          description: 'Unauthorized - invalid or missing token',
+          content: {
+            'application/json': {
+              schema: {
+                $ref: '#/components/schemas/Error',
+              },
+            },
+          },
+        },
+        Forbidden: {
+          description: 'Forbidden - insufficient permissions',
+          content: {
+            'application/json': {
+              schema: {
+                $ref: '#/components/schemas/Error',
+              },
+            },
+          },
+        },
+        NotFound: {
+          description: 'Resource not found',
+          content: {
+            'application/json': {
+              schema: {
+                $ref: '#/components/schemas/Error',
+              },
+            },
+          },
+        },
+        InternalServerError: {
+          description: 'Internal server error',
+          content: {
+            'application/json': {
+              schema: {
+                $ref: '#/components/schemas/Error',
+              },
+            },
+          },
+        },
+      },
     },
     tags: [
       {
         name: 'Authentication',
         description: 'User authentication and authorization endpoints',
+      },
+      {
+        name: 'Users',
+        description: 'User management and profile endpoints',
       },
       {
         name: 'Health',
