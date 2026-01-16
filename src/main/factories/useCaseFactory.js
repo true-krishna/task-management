@@ -38,6 +38,12 @@ const ReorderTasks = require('../../application/use-cases/task/ReorderTasks');
 const AssignTask = require('../../application/use-cases/task/AssignTask');
 const DeleteTask = require('../../application/use-cases/task/DeleteTask');
 
+// Dashboard use cases
+const GetDashboardStats = require('../../application/use-cases/dashboard/GetDashboardStats');
+const GetTaskDistribution = require('../../application/use-cases/dashboard/GetTaskDistribution');
+const GetPriorityDistribution = require('../../application/use-cases/dashboard/GetPriorityDistribution');
+const GetWeeklyTrend = require('../../application/use-cases/dashboard/GetWeeklyTrend');
+
 class UseCaseFactory {
   constructor({ repositoryFactory, serviceFactory, logger }) {
     this.repositoryFactory = repositoryFactory;
@@ -457,6 +463,68 @@ class UseCaseFactory {
       });
     }
     return this.useCases.deleteTask;
+  }
+
+  // ==================== Dashboard Use Cases ====================
+
+  /**
+   * Get or create GetDashboardStats use case
+   */
+  getGetDashboardStats() {
+    if (!this.useCases.getDashboardStats) {
+      this.useCases.getDashboardStats = new GetDashboardStats({
+        taskRepository: this.repositoryFactory.getTaskRepository(),
+        projectRepository: this.repositoryFactory.getProjectRepository(),
+        cacheService: this.serviceFactory.getCacheService(),
+        logger: this.logger,
+      });
+    }
+    return this.useCases.getDashboardStats;
+  }
+
+  /**
+   * Get or create GetTaskDistribution use case
+   */
+  getGetTaskDistribution() {
+    if (!this.useCases.getTaskDistribution) {
+      this.useCases.getTaskDistribution = new GetTaskDistribution({
+        taskRepository: this.repositoryFactory.getTaskRepository(),
+        projectRepository: this.repositoryFactory.getProjectRepository(),
+        cacheService: this.serviceFactory.getCacheService(),
+        logger: this.logger,
+      });
+    }
+    return this.useCases.getTaskDistribution;
+  }
+
+  /**
+   * Get or create GetPriorityDistribution use case
+   */
+  getGetPriorityDistribution() {
+    if (!this.useCases.getPriorityDistribution) {
+      this.useCases.getPriorityDistribution = new GetPriorityDistribution({
+        taskRepository: this.repositoryFactory.getTaskRepository(),
+        projectRepository: this.repositoryFactory.getProjectRepository(),
+        cacheService: this.serviceFactory.getCacheService(),
+        logger: this.logger,
+      });
+    }
+    return this.useCases.getPriorityDistribution;
+  }
+
+  /**
+   * Get or create GetWeeklyTrend use case
+   */
+  getGetWeeklyTrend() {
+    if (!this.useCases.getWeeklyTrend) {
+      this.useCases.getWeeklyTrend = new GetWeeklyTrend({
+        taskRepository: this.repositoryFactory.getTaskRepository(),
+        projectRepository: this.repositoryFactory.getProjectRepository(),
+        cacheService: this.serviceFactory.getCacheService(),
+        logger: this.logger,
+      });
+    }
+    return this.useCases.getWeeklyTrend;
   }
 }
 

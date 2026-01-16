@@ -6,6 +6,7 @@ const AuthController = require('../../presentation/controllers/AuthController');
 const UserController = require('../../presentation/controllers/UserController');
 const ProjectController = require('../../presentation/controllers/ProjectController');
 const TaskController = require('../../presentation/controllers/TaskController');
+const DashboardController = require('../../presentation/controllers/DashboardController');
 
 class ControllerFactory {
   constructor({ useCaseFactory, logger }) {
@@ -90,6 +91,22 @@ class ControllerFactory {
       });
     }
     return this.controllers.taskController;
+  }
+
+  /**
+   * Get or create DashboardController
+   */
+  getDashboardController() {
+    if (!this.controllers.dashboardController) {
+      this.controllers.dashboardController = new DashboardController({
+        getDashboardStats: this.useCaseFactory.getGetDashboardStats(),
+        getTaskDistribution: this.useCaseFactory.getGetTaskDistribution(),
+        getPriorityDistribution: this.useCaseFactory.getGetPriorityDistribution(),
+        getWeeklyTrend: this.useCaseFactory.getGetWeeklyTrend(),
+        logger: this.logger,
+      });
+    }
+    return this.controllers.dashboardController;
   }
 }
 
