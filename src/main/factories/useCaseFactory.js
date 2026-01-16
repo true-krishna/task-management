@@ -44,6 +44,13 @@ const GetTaskDistribution = require('../../application/use-cases/dashboard/GetTa
 const GetPriorityDistribution = require('../../application/use-cases/dashboard/GetPriorityDistribution');
 const GetWeeklyTrend = require('../../application/use-cases/dashboard/GetWeeklyTrend');
 
+// Audit use cases
+const LogActivity = require('../../application/use-cases/audit/LogActivity');
+const GetEntityActivity = require('../../application/use-cases/audit/GetEntityActivity');
+const GetUserActivity = require('../../application/use-cases/audit/GetUserActivity');
+const GetAllActivity = require('../../application/use-cases/audit/GetAllActivity');
+const GetActivityStatistics = require('../../application/use-cases/audit/GetActivityStatistics');
+
 class UseCaseFactory {
   constructor({ repositoryFactory, serviceFactory, logger }) {
     this.repositoryFactory = repositoryFactory;
@@ -525,6 +532,75 @@ class UseCaseFactory {
       });
     }
     return this.useCases.getWeeklyTrend;
+  }
+
+  // ==================== Audit Use Cases ====================
+
+  /**
+   * Get or create LogActivity use case
+   */
+  getLogActivity() {
+    if (!this.useCases.logActivity) {
+      this.useCases.logActivity = new LogActivity({
+        auditLogRepository: this.repositoryFactory.getAuditLogRepository(),
+        logger: this.logger,
+      });
+    }
+    return this.useCases.logActivity;
+  }
+
+  /**
+   * Get or create GetEntityActivity use case
+   */
+  getGetEntityActivity() {
+    if (!this.useCases.getEntityActivity) {
+      this.useCases.getEntityActivity = new GetEntityActivity({
+        auditLogRepository: this.repositoryFactory.getAuditLogRepository(),
+        projectRepository: this.repositoryFactory.getProjectRepository(),
+        taskRepository: this.repositoryFactory.getTaskRepository(),
+        logger: this.logger,
+      });
+    }
+    return this.useCases.getEntityActivity;
+  }
+
+  /**
+   * Get or create GetUserActivity use case
+   */
+  getGetUserActivity() {
+    if (!this.useCases.getUserActivity) {
+      this.useCases.getUserActivity = new GetUserActivity({
+        auditLogRepository: this.repositoryFactory.getAuditLogRepository(),
+        logger: this.logger,
+      });
+    }
+    return this.useCases.getUserActivity;
+  }
+
+  /**
+   * Get or create GetAllActivity use case
+   */
+  getGetAllActivity() {
+    if (!this.useCases.getAllActivity) {
+      this.useCases.getAllActivity = new GetAllActivity({
+        auditLogRepository: this.repositoryFactory.getAuditLogRepository(),
+        logger: this.logger,
+      });
+    }
+    return this.useCases.getAllActivity;
+  }
+
+  /**
+   * Get or create GetActivityStatistics use case
+   */
+  getGetActivityStatistics() {
+    if (!this.useCases.getActivityStatistics) {
+      this.useCases.getActivityStatistics = new GetActivityStatistics({
+        auditLogRepository: this.repositoryFactory.getAuditLogRepository(),
+        logger: this.logger,
+      });
+    }
+    return this.useCases.getActivityStatistics;
   }
 }
 
