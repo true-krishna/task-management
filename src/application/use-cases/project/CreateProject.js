@@ -11,23 +11,31 @@ class CreateProject {
     this.logger = logger;
   }
 
-  async execute(userId, projectData) {
+  async execute({ name, description, status, visibility, userId }) {
     try {
-      this.logger.debug('CreateProject use case executing', { userId });
+      this.logger.debug('CreateProject use case executing', { userId, name, description, status, visibility });
 
       // Validate required fields
-      if (!projectData.name) {
+      if (!name) {
         throw new ValidationError('Project name is required');
       }
 
-      // Create project with user as owner
-      const project = await this.projectRepository.create({
-        ...projectData,
+      // Prepare project data
+      const projectData = {
+        name,
+        description,
+        status,
+        visibility,
         ownerId: userId,
         createdBy: userId,
         modifiedBy: userId,
-        members: [userId], // Owner is automatically a member
-      });
+        members: [userId],
+      };
+
+      this.logger.debug('Project data prepared', projectData);
+
+      // Create project with user as owner
+      const project = await this.projectRepository.create(projectData);
 
       // Invalidate user's project cache
       await this.cacheService.del(`project:user:${userId}`);

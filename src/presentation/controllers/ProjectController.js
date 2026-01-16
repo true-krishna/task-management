@@ -31,7 +31,7 @@ class ProjectController {
    */
   async create(req, res, next) {
     try {
-      const userId = req.user.userId;
+      const userId = req.user.id;
       const { name, description, status, visibility } = req.body;
 
       const project = await this.createProject.execute({
@@ -59,7 +59,7 @@ class ProjectController {
    */
   async getById(req, res, next) {
     try {
-      const userId = req.user.userId;
+      const userId = req.user.id;
       const userRole = req.user.role;
       const { projectId } = req.params;
 
@@ -79,7 +79,7 @@ class ProjectController {
    */
   async getAll(req, res, next) {
     try {
-      const userId = req.user.userId;
+      const userId = req.user.id;
       const userRole = req.user.role;
       const { page, limit, status, visibility } = req.query;
 
@@ -110,7 +110,7 @@ class ProjectController {
    */
   async update(req, res, next) {
     try {
-      const userId = req.user.userId;
+      const userId = req.user.id;
       const userRole = req.user.role;
       const { projectId } = req.params;
       const updateData = req.body;
@@ -139,7 +139,7 @@ class ProjectController {
    */
   async delete(req, res, next) {
     try {
-      const userId = req.user.userId;
+      const userId = req.user.id;
       const userRole = req.user.role;
       const { projectId } = req.params;
 
@@ -158,7 +158,7 @@ class ProjectController {
    */
   async changeVisibility(req, res, next) {
     try {
-      const userId = req.user.userId;
+      const userId = req.user.id;
       const userRole = req.user.role;
       const { projectId } = req.params;
       const { visibility } = req.body;
@@ -187,7 +187,7 @@ class ProjectController {
    */
   async addMember(req, res, next) {
     try {
-      const requestingUserId = req.user.userId;
+      const requestingUserId = req.user.id;
       const requestingUserRole = req.user.role;
       const { projectId } = req.params;
       const { userId } = req.body;
@@ -220,7 +220,7 @@ class ProjectController {
    */
   async removeMember(req, res, next) {
     try {
-      const requestingUserId = req.user.userId;
+      const requestingUserId = req.user.id;
       const requestingUserRole = req.user.role;
       const { projectId, userId } = req.params;
 
@@ -252,7 +252,7 @@ class ProjectController {
    */
   async getMembers(req, res, next) {
     try {
-      const userId = req.user.userId;
+      const userId = req.user.id;
       const userRole = req.user.role;
       const { projectId } = req.params;
 

@@ -49,7 +49,7 @@ const ProjectSchema = new Schema(
     modifiedBy: {
       type: Schema.Types.ObjectId,
       ref: 'User',
-      required: true,
+      required: false,
     },
   },
   {
