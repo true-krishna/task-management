@@ -3,38 +3,23 @@
  */
 const request = require('supertest');
 const mongoose = require('mongoose');
-const { MongoMemoryServer } = require('mongodb-memory-server');
-const AppFactory = require('../../../src/main/AppFactory');
-const UserModel = require('../../../src/infrastructure/database/mongoose/models/UserModel');
+const TestHelper = require('../helpers/testHelper');
 
 describe('Authentication API Integration Tests', () => {
+  let testHelper;
   let app;
-  let mongoServer;
 
   beforeAll(async () => {
-    // Start in-memory MongoDB
-    mongoServer = await MongoMemoryServer.create();
-    const mongoUri = mongoServer.getUri();
-
-    // Connect to in-memory database
-    await mongoose.connect(mongoUri);
-
-    // Create Express app
-    const appFactory = new AppFactory();
-    app = await appFactory.create();
+    testHelper = new TestHelper();
+    app = await testHelper.setup();
   });
 
   afterAll(async () => {
-    await mongoose.disconnect();
-    await mongoServer.stop();
+    await testHelper.teardown();
   });
 
   afterEach(async () => {
-    // Clear all collections after each test
-    const collections = mongoose.connection.collections;
-    for (const key in collections) {
-      await collections[key].deleteMany();
-    }
+    await testHelper.clearDatabase();
   });
 
   describe('POST /api/v1/auth/register', () => {
