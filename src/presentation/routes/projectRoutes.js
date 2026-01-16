@@ -5,12 +5,14 @@ const express = require('express');
  */
 const createProjectRoutes = ({
   projectController,
+  taskController,
   authMiddleware,
   roleMiddleware,
   validationMiddleware,
   projectValidators,
 }) => {
   const router = express.Router();
+  const taskValidators = require('../validators/taskValidators');
 
   /**
    * @swagger
@@ -386,6 +388,94 @@ const createProjectRoutes = ({
     authMiddleware,
     validationMiddleware(projectValidators.projectIdParamSchema, 'params'),
     projectController.getMembers.bind(projectController)
+  );
+
+  /**
+   * @swagger
+   * /api/v1/projects/{projectId}/tasks:
+   *   get:
+   *     tags:
+   *       - Tasks
+   *     summary: Get all tasks for a project
+   *     description: Retrieves all tasks for a project with optional filtering. Returns tasks grouped by status for Kanban view.
+   *     security:
+   *       - bearerAuth: []
+   *     parameters:
+   *       - in: path
+   *         name: projectId
+   *         required: true
+   *         schema:
+   *           type: string
+   *         description: Project ID (MongoDB ObjectId)
+   *       - in: query
+   *         name: status
+   *         schema:
+   *           type: string
+   *           enum: [not_started, in_progress, completed]
+   *         description: Filter by task status
+   *       - in: query
+   *         name: priority
+   *         schema:
+   *           type: string
+   *           enum: [none, low, medium, high]
+   *         description: Filter by task priority
+   *       - in: query
+   *         name: assigneeId
+   *         schema:
+   *           type: string
+   *         description: Filter by assignee user ID
+   *     responses:
+   *       200:
+   *         description: Tasks retrieved successfully
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
+   *               properties:
+   *                 success:
+   *                   type: boolean
+   *                   example: true
+   *                 data:
+   *                   type: object
+   *                   properties:
+   *                     projectId:
+   *                       type: string
+   *                       example: 507f1f77bcf86cd799439011
+   *                     tasks:
+   *                       type: array
+   *                       items:
+   *                         $ref: '#/components/schemas/Task'
+   *                     groupedByStatus:
+   *                       type: object
+   *                       properties:
+   *                         not_started:
+   *                           type: array
+   *                           items:
+   *                             $ref: '#/components/schemas/Task'
+   *                         in_progress:
+   *                           type: array
+   *                           items:
+   *                             $ref: '#/components/schemas/Task'
+   *                         completed:
+   *                           type: array
+   *                           items:
+   *                             $ref: '#/components/schemas/Task'
+   *                     total:
+   *                       type: integer
+   *                       example: 15
+   *       401:
+   *         $ref: '#/components/responses/Unauthorized'
+   *       403:
+   *         $ref: '#/components/responses/Forbidden'
+   *       404:
+   *         $ref: '#/components/responses/NotFound'
+   */
+  router.get(
+    '/:projectId/tasks',
+    authMiddleware,
+    validationMiddleware(taskValidators.projectIdParamSchema, 'params'),
+    validationMiddleware(taskValidators.getProjectTasksQuerySchema, 'query'),
+    taskController.getProjectTasks.bind(taskController)
   );
 
   return router;
