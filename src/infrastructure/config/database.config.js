@@ -2,7 +2,7 @@
  * MongoDB Connection Configuration
  */
 const mongoose = require('mongoose');
-const config = require('../config/env');
+const config = require('../../main/config/env');
 
 let connectionInstance = null;
 

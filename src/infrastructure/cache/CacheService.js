@@ -19,7 +19,7 @@ class CacheService extends ICacheService {
       const value = await this.redis.get(key);
       if (value) {
         this.logger.debug('Cache hit', { key });
-        return JSON.parse(value);
+        return value;
       }
       this.logger.debug('Cache miss', { key });
       return null;
@@ -33,7 +33,7 @@ class CacheService extends ICacheService {
     if (!this.enabled) return;
 
     try {
-      await this.redis.setEx(key, ttl, JSON.stringify(value));
+      await this.redis.setEx(key, ttl, value);
       this.logger.debug('Cache set', { key, ttl });
     } catch (error) {
       this.logger.error('Cache set error', { error: error.message, key });
