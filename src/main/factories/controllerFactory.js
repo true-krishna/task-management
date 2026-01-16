@@ -5,6 +5,7 @@
 const AuthController = require('../../presentation/controllers/AuthController');
 const UserController = require('../../presentation/controllers/UserController');
 const ProjectController = require('../../presentation/controllers/ProjectController');
+const TaskController = require('../../presentation/controllers/TaskController');
 
 class ControllerFactory {
   constructor({ useCaseFactory, logger }) {
@@ -66,6 +67,29 @@ class ControllerFactory {
       });
     }
     return this.controllers.projectController;
+  }
+
+  /**
+   * Get or create TaskController
+   */
+  getTaskController() {
+    if (!this.controllers.taskController) {
+      this.controllers.taskController = new TaskController({
+        useCases: {
+          createTask: this.useCaseFactory.getCreateTask(),
+          getTask: this.useCaseFactory.getGetTask(),
+          getProjectTasks: this.useCaseFactory.getGetProjectTasks(),
+          updateTask: this.useCaseFactory.getUpdateTask(),
+          updateTaskStatus: this.useCaseFactory.getUpdateTaskStatus(),
+          updateTaskPriority: this.useCaseFactory.getUpdateTaskPriority(),
+          reorderTasks: this.useCaseFactory.getReorderTasks(),
+          assignTask: this.useCaseFactory.getAssignTask(),
+          deleteTask: this.useCaseFactory.getDeleteTask(),
+        },
+        logger: this.logger,
+      });
+    }
+    return this.controllers.taskController;
   }
 }
 

@@ -5,6 +5,7 @@
 const UserRepository = require('../../infrastructure/repositories/UserRepository');
 const RefreshTokenRepository = require('../../infrastructure/repositories/RefreshTokenRepository');
 const ProjectRepository = require('../../infrastructure/repositories/ProjectRepository');
+const TaskRepository = require('../../infrastructure/repositories/TaskRepository');
 
 class RepositoryFactory {
   constructor({ logger }) {
@@ -40,6 +41,16 @@ class RepositoryFactory {
       this.repositories.projectRepository = new ProjectRepository(this.logger);
     }
     return this.repositories.projectRepository;
+  }
+
+  /**
+   * Get or create TaskRepository
+   */
+  getTaskRepository() {
+    if (!this.repositories.taskRepository) {
+      this.repositories.taskRepository = new TaskRepository(this.logger);
+    }
+    return this.repositories.taskRepository;
   }
 }
 

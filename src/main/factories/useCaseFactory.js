@@ -27,6 +27,17 @@ const AssignUserToProject = require('../../application/use-cases/project/AssignU
 const RemoveUserFromProject = require('../../application/use-cases/project/RemoveUserFromProject');
 const GetProjectMembers = require('../../application/use-cases/project/GetProjectMembers');
 
+// Task use cases
+const CreateTask = require('../../application/use-cases/task/CreateTask');
+const GetTask = require('../../application/use-cases/task/GetTask');
+const GetProjectTasks = require('../../application/use-cases/task/GetProjectTasks');
+const UpdateTask = require('../../application/use-cases/task/UpdateTask');
+const UpdateTaskStatus = require('../../application/use-cases/task/UpdateTaskStatus');
+const UpdateTaskPriority = require('../../application/use-cases/task/UpdateTaskPriority');
+const ReorderTasks = require('../../application/use-cases/task/ReorderTasks');
+const AssignTask = require('../../application/use-cases/task/AssignTask');
+const DeleteTask = require('../../application/use-cases/task/DeleteTask');
+
 class UseCaseFactory {
   constructor({ repositoryFactory, serviceFactory, logger }) {
     this.repositoryFactory = repositoryFactory;
@@ -308,6 +319,144 @@ class UseCaseFactory {
       });
     }
     return this.useCases.getProjectMembers;
+  }
+
+  // ==================== Task Use Cases ====================
+
+  /**
+   * Get or create CreateTask use case
+   */
+  getCreateTask() {
+    if (!this.useCases.createTask) {
+      this.useCases.createTask = new CreateTask({
+        taskRepository: this.repositoryFactory.getTaskRepository(),
+        projectRepository: this.repositoryFactory.getProjectRepository(),
+        cacheService: this.serviceFactory.getCacheService(),
+        logger: this.logger,
+      });
+    }
+    return this.useCases.createTask;
+  }
+
+  /**
+   * Get or create GetTask use case
+   */
+  getGetTask() {
+    if (!this.useCases.getTask) {
+      this.useCases.getTask = new GetTask({
+        taskRepository: this.repositoryFactory.getTaskRepository(),
+        projectRepository: this.repositoryFactory.getProjectRepository(),
+        cacheService: this.serviceFactory.getCacheService(),
+        logger: this.logger,
+      });
+    }
+    return this.useCases.getTask;
+  }
+
+  /**
+   * Get or create GetProjectTasks use case
+   */
+  getGetProjectTasks() {
+    if (!this.useCases.getProjectTasks) {
+      this.useCases.getProjectTasks = new GetProjectTasks({
+        taskRepository: this.repositoryFactory.getTaskRepository(),
+        projectRepository: this.repositoryFactory.getProjectRepository(),
+        cacheService: this.serviceFactory.getCacheService(),
+        logger: this.logger,
+      });
+    }
+    return this.useCases.getProjectTasks;
+  }
+
+  /**
+   * Get or create UpdateTask use case
+   */
+  getUpdateTask() {
+    if (!this.useCases.updateTask) {
+      this.useCases.updateTask = new UpdateTask({
+        taskRepository: this.repositoryFactory.getTaskRepository(),
+        projectRepository: this.repositoryFactory.getProjectRepository(),
+        cacheService: this.serviceFactory.getCacheService(),
+        logger: this.logger,
+      });
+    }
+    return this.useCases.updateTask;
+  }
+
+  /**
+   * Get or create UpdateTaskStatus use case
+   */
+  getUpdateTaskStatus() {
+    if (!this.useCases.updateTaskStatus) {
+      this.useCases.updateTaskStatus = new UpdateTaskStatus({
+        taskRepository: this.repositoryFactory.getTaskRepository(),
+        projectRepository: this.repositoryFactory.getProjectRepository(),
+        cacheService: this.serviceFactory.getCacheService(),
+        logger: this.logger,
+      });
+    }
+    return this.useCases.updateTaskStatus;
+  }
+
+  /**
+   * Get or create UpdateTaskPriority use case
+   */
+  getUpdateTaskPriority() {
+    if (!this.useCases.updateTaskPriority) {
+      this.useCases.updateTaskPriority = new UpdateTaskPriority({
+        taskRepository: this.repositoryFactory.getTaskRepository(),
+        projectRepository: this.repositoryFactory.getProjectRepository(),
+        cacheService: this.serviceFactory.getCacheService(),
+        logger: this.logger,
+      });
+    }
+    return this.useCases.updateTaskPriority;
+  }
+
+  /**
+   * Get or create ReorderTasks use case
+   */
+  getReorderTasks() {
+    if (!this.useCases.reorderTasks) {
+      this.useCases.reorderTasks = new ReorderTasks({
+        taskRepository: this.repositoryFactory.getTaskRepository(),
+        projectRepository: this.repositoryFactory.getProjectRepository(),
+        cacheService: this.serviceFactory.getCacheService(),
+        logger: this.logger,
+      });
+    }
+    return this.useCases.reorderTasks;
+  }
+
+  /**
+   * Get or create AssignTask use case
+   */
+  getAssignTask() {
+    if (!this.useCases.assignTask) {
+      this.useCases.assignTask = new AssignTask({
+        taskRepository: this.repositoryFactory.getTaskRepository(),
+        projectRepository: this.repositoryFactory.getProjectRepository(),
+        userRepository: this.repositoryFactory.getUserRepository(),
+        cacheService: this.serviceFactory.getCacheService(),
+        logger: this.logger,
+      });
+    }
+    return this.useCases.assignTask;
+  }
+
+  /**
+   * Get or create DeleteTask use case
+   */
+  getDeleteTask() {
+    if (!this.useCases.deleteTask) {
+      this.useCases.deleteTask = new DeleteTask({
+        taskRepository: this.repositoryFactory.getTaskRepository(),
+        projectRepository: this.repositoryFactory.getProjectRepository(),
+        cacheService: this.serviceFactory.getCacheService(),
+        logger: this.logger,
+      });
+    }
+    return this.useCases.deleteTask;
   }
 }
 
