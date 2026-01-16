@@ -1,239 +1,408 @@
 # Task Manager Backend API
 
-A RESTful API backend for a Task Manager application built with Node.js, Express, MongoDB, and Redis using Clean Architecture pattern.
+A production-ready RESTful API backend for a Task Manager application built with Node.js, Express, MongoDB, and Redis following Clean Architecture principles.
 
-## Tech Stack
+## ✨ Features
 
-- **Runtime**: Node.js (v18+)
-- **Framework**: Express.js
-- **Database**: MongoDB with Mongoose ODM
-- **Cache**: Redis
-- **Authentication**: JWT with refresh tokens
-- **Security**: bcryptjs for password hashing, Helmet for security headers
-- **Logging**: Winston with daily rotation
-- **Testing**: Jest with Supertest
-- **Code Quality**: ESLint, Prettier
+- 🔐 **Authentication & Authorization**: JWT-based auth with refresh tokens and role-based access control
+- 👥 **User Management**: User profiles, admin controls, and user deactivation
+- 📁 **Project Management**: Create, update, and manage projects with team collaboration
+- ✅ **Task Management**: Full task lifecycle with priorities, statuses, assignments, and due dates
+- 📊 **Dashboard & Analytics**: Real-time statistics, task distributions, and weekly trends
+- 📝 **Audit Trail**: Complete activity logging for compliance and tracking
+- ⚡ **Redis Caching**: High-performance caching layer for frequent queries
+- 📚 **Swagger Documentation**: Interactive API documentation at `/api-docs`
+- 🔒 **Security**: Rate limiting, helmet protection, input validation, and secure password hashing
+- 📈 **Logging**: Structured logging with Winston and daily rotation
 
-## Project Structure
+## 🏗️ Architecture
 
-This project follows **Clean Architecture** principles with four main layers:
-
-- **Domain Layer**: Business entities, rules, and interfaces
-- **Application Layer**: Use cases and business logic orchestration
-- **Infrastructure Layer**: External service implementations (DB, Cache, Security)
-- **Presentation Layer**: HTTP controllers, routes, and middlewares
+This project follows **Clean Architecture** with clear separation of concerns:
 
 ```
 src/
-├── domain/              # Business entities & rules
-├── application/         # Use cases & DTOs
-├── infrastructure/      # External implementations
-├── presentation/        # Controllers, routes, middlewares
-└── main/               # Application setup & factories
+├── domain/                 # Enterprise Business Rules
+│   ├── entities/          # Business entities (User, Project, Task)
+│   ├── enums/             # Domain enumerations
+│   ├── errors/            # Domain-specific errors
+│   └── interfaces/        # Repository & service interfaces
+│
+├── application/           # Application Business Rules
+│   └── use-cases/        # Business logic (auth, projects, tasks, etc.)
+│
+├── infrastructure/        # Frameworks & Drivers
+│   ├── database/         # MongoDB connection & schemas
+│   ├── cache/            # Redis implementation
+│   ├── security/         # Password & token services
+│   └── repositories/     # Data access implementations
+│
+├── presentation/         # Interface Adapters
+│   ├── controllers/      # HTTP request handlers
+│   ├── routes/           # API routes with Swagger docs
+│   ├── middlewares/      # Auth, validation, error handling
+│   └── validators/       # Request validation schemas
+│
+└── main/                 # Application Entry Point
+    ├── factories/        # Dependency injection factories
+    └── server.js         # Application bootstrap
 ```
 
-## Prerequisites
+### Key Design Patterns
 
-- Node.js 18+
-- MongoDB 5+
-- Redis 6+
-- npm or yarn
+- **Clean Architecture**: Dependency inversion, business logic isolation
+- **Repository Pattern**: Abstract data access layer
+- **Factory Pattern**: Centralized dependency injection
+- **Use Case Pattern**: Single responsibility business operations
+- **Middleware Pattern**: Cross-cutting concerns (auth, validation, logging)
 
-## Installation
+## 🚀 Tech Stack
 
-1. **Clone the repository**
+- **Runtime**: Node.js 18+
+- **Framework**: Express.js 4.18
+- **Database**: MongoDB 8.0 with Mongoose ODM
+- **Cache**: Redis 4.6
+- **Authentication**: JSON Web Tokens (JWT)
+- **Security**: bcryptjs, Helmet, express-rate-limit
+- **Logging**: Winston with daily rotation
+- **Testing**: Jest with Supertest
+- **Documentation**: Swagger/OpenAPI 3.0
+- **Code Quality**: ESLint (Airbnb style), Prettier
+
+## 📋 Prerequisites
+
+- **Node.js**: v18.0.0 or higher
+- **MongoDB**: v5.0 or higher
+- **Redis**: v6.0 or higher
+- **npm**: v8.0 or higher (or yarn)
+
+## 🔧 Installation
+
+### 1. Clone the Repository
 ```bash
-git clone <repository-url>
+git clone https://github.com/true-krishna/task-management.git
 cd task-manager-backend
 ```
 
-2. **Install dependencies**
+### 2. Install Dependencies
 ```bash
 npm install
 ```
 
-3. **Setup environment variables**
+### 3. Setup Environment Variables
+
+Create a `.env` file in the root directory:
 ```bash
 cp .env.example .env
 ```
 
-Edit `.env` with your configuration:
+Configure your environment variables:
 ```env
+# Application
 NODE_ENV=development
 PORT=5000
+
+# MongoDB
 MONGODB_URI=mongodb://localhost:27017/taskmanager
+MONGODB_TEST_URI=mongodb://localhost:27017/taskmanager-test
+
+# Redis
 REDIS_HOST=localhost
 REDIS_PORT=6379
-JWT_ACCESS_SECRET=your-secret-key
-JWT_REFRESH_SECRET=your-refresh-secret
+REDIS_PASSWORD=
+REDIS_DB=0
+
+# JWT
+JWT_ACCESS_SECRET=your-super-secret-access-key-change-in-production
+JWT_REFRESH_SECRET=your-super-secret-refresh-key-change-in-production
+JWT_ACCESS_EXPIRES_IN=15m
+JWT_REFRESH_EXPIRES_IN=7d
+
+# CORS
 CORS_ORIGIN=http://localhost:3000
+
+# Rate Limiting
+RATE_LIMIT_WINDOW_MS=900000  # 15 minutes
+RATE_LIMIT_MAX_REQUESTS=100
+
+# Logging
+LOG_LEVEL=info
+LOG_FILE_PATH=logs
 ```
 
-## Running the Application
+### 4. Start Required Services
 
-### Development
+#### MongoDB
+```bash
+# Using Docker
+docker run -d -p 27017:27017 --name mongodb mongo:8.0
+
+# Or use your local MongoDB installation
+mongod
+```
+
+#### Redis
+```bash
+# Using Docker
+docker run -d -p 6379:6379 --name redis redis:7-alpine
+
+# Or use your local Redis installation
+redis-server
+```
+
+### 5. Initialize Database (Optional)
+
+Create an admin user:
+```bash
+node create-admin.js
+```
+
+## 🎮 Running the Application
+
+### Development Mode (with hot reload)
 ```bash
 npm run dev
 ```
 
-### Production
+The API will be available at `http://localhost:5000`
+
+### Production Mode
 ```bash
 npm start
 ```
 
-### Testing
+### Docker (Coming Soon)
 ```bash
-# Run all tests
-npm test
+docker-compose up -d
+```
 
-# Run unit tests
+## 🧪 Testing
+
+### Run All Tests
+```bash
+npm test
+```
+
+### Run Tests by Type
+```bash
+# Unit tests only
 npm run test:unit
 
-# Run integration tests
+# Integration tests only
 npm run test:integration
 
-# Watch mode
+# Watch mode (for development)
 npm run test:watch
 ```
 
-### Code Quality
+### Test Coverage
 ```bash
-# Lint code
+# Generate coverage report
+npm test
+
+# Coverage reports are in ./coverage/lcov-report/index.html
+```
+
+### Manual API Testing
+
+Use the provided test scripts:
+```bash
+# Test authentication endpoints
+./test-server.sh
+
+# Test user management
+./test-user-management.sh
+
+# Test project management
+./test-project-management.sh
+
+# Test task management
+./test-task-management.sh
+
+# Test dashboard
+./test-dashboard.sh
+
+# Test audit logs
+./test-audit.sh
+```
+
+## 📖 API Documentation
+
+### Interactive Documentation (Swagger)
+Once the server is running, access the interactive API documentation at:
+```
+http://localhost:5000/api-docs
+```
+
+### Complete API Guide
+See [API_GUIDE.md](./API_GUIDE.md) for comprehensive documentation with examples.
+
+### Quick Start Examples
+
+#### Register and Login
+```bash
+# Register
+curl -X POST http://localhost:5000/api/v1/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "user@example.com",
+    "username": "testuser",
+    "password": "SecurePass123!",
+    "firstName": "Test",
+    "lastName": "User"
+  }'
+
+# Login
+curl -X POST http://localhost:5000/api/v1/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "user@example.com",
+    "password": "SecurePass123!"
+  }'
+```
+
+#### Create Project and Task
+```bash
+# Set your access token
+TOKEN="your-access-token-here"
+
+# Create project
+curl -X POST http://localhost:5000/api/v1/projects \
+  -H "Authorization: Bearer $TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "My Project",
+    "description": "Project description",
+    "visibility": "team"
+  }'
+
+# Create task
+curl -X POST http://localhost:5000/api/v1/tasks \
+  -H "Authorization: Bearer $TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "title": "My Task",
+    "description": "Task description",
+    "projectId": "project-id-here",
+    "priority": "high"
+  }'
+```
+
+## 🔐 Security Features
+
+- **JWT Authentication**: Secure token-based authentication with refresh tokens
+- **Password Hashing**: bcryptjs with salt rounds for secure password storage
+- **Rate Limiting**: Prevent brute force attacks with configurable rate limits
+- **Helmet**: Security headers for common vulnerabilities
+- **Input Validation**: Joi schemas for request validation
+- **CORS**: Configured CORS for cross-origin requests
+- **Role-Based Access Control**: Admin and user roles with permission checks
+- **Audit Logging**: Complete activity trail for security compliance
+
+## 📊 Performance Features
+
+- **Redis Caching**: High-performance caching layer for frequently accessed data
+- **Database Indexing**: Optimized MongoDB indexes for fast queries
+- **Connection Pooling**: Efficient database connection management
+- **Compression**: Response compression with gzip
+- **Query Optimization**: Aggregation pipelines and efficient queries
+
+## 🗂️ Project Status
+
+### Completed Phases
+
+- ✅ **Phase 1**: Foundation & Setup
+- ✅ **Phase 2**: Authentication System
+- ✅ **Phase 3**: User Management
+- ✅ **Phase 4**: Project Management
+- ✅ **Phase 5**: Task Management
+- ✅ **Phase 6**: Dashboard & Analytics
+- ✅ **Phase 7**: Audit Trail & Activity Logs
+- 🔄 **Phase 8**: Testing & Documentation (In Progress)
+- ⏳ **Phase 9**: Deployment & Production Setup (Pending)
+
+See individual phase completion documents:
+- [PHASE2_COMPLETED.md](./PHASE2_COMPLETED.md) - Authentication
+- [PHASE3_COMPLETED.md](./PHASE3_COMPLETED.md) - User Management
+- [PHASE4_COMPLETED.md](./PHASE4_COMPLETED.md) - Project Management
+- [PHASE5_COMPLETED.md](./PHASE5_COMPLETED.md) - Task Management
+- [PHASE6_COMPLETED.md](./PHASE6_COMPLETED.md) - Dashboard & Analytics
+- [PHASE7_COMPLETED.md](./PHASE7_COMPLETED.md) - Audit Trail
+
+## 📁 Code Quality
+
+### Linting
+```bash
+# Check code quality
 npm run lint
 
-# Fix linting issues
+# Auto-fix linting issues
 npm run lint:fix
+```
 
-# Format code
-npm run format
-
-# Check formatting
+### Formatting
+```bash
+# Check code formatting
 npm run format:check
+
+# Auto-format code
+npm run format
 ```
 
-## API Documentation
+### Code Style
+- **ESLint**: Airbnb JavaScript Style Guide
+- **Prettier**: Consistent code formatting
+- **EditorConfig**: Consistent editor settings
 
-Once the server is running, API documentation is available at:
-- **Swagger UI**: http://localhost:5000/api-docs (Phase 6+)
+## 🤝 Contributing
 
-### Health Check
-```bash
-curl http://localhost:5000/api/health
-```
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
-## Environment Variables
+### Commit Guidelines
+- Use conventional commits: `feat:`, `fix:`, `docs:`, `test:`, `refactor:`, etc.
+- Keep commits atomic and descriptive
+- Reference issues in commits when applicable
 
-See `.env.example` for all available configuration options.
+## 📝 License
 
-### Key Variables
+This project is licensed under the MIT License - see the LICENSE file for details.
 
-| Variable | Description | Default |
-|----------|-------------|---------|
-| NODE_ENV | Environment (development/production) | development |
-| PORT | Server port | 5000 |
-| MONGODB_URI | MongoDB connection string | localhost:27017 |
-| REDIS_HOST | Redis host | localhost |
-| REDIS_PORT | Redis port | 6379 |
-| JWT_ACCESS_EXPIRATION | Access token TTL | 15m |
-| JWT_REFRESH_EXPIRATION | Refresh token TTL | 7d |
-| CACHE_ENABLED | Enable Redis caching | true |
+## 👨‍💻 Author
 
-## Development
+**Your Name**
+- GitHub: [@true-krishna](https://github.com/true-krishna)
 
-### Database Setup
+## 🙏 Acknowledgments
 
-**Start MongoDB**
-```bash
-# Using Docker
-docker run -d -p 27017:27017 --name mongodb mongo:latest
+- Clean Architecture principles by Robert C. Martin
+- Express.js community
+- MongoDB and Redis teams
+- All open-source contributors
 
-# Using local installation
-mongod
-```
+## 📞 Support
 
-**Start Redis**
-```bash
-# Using Docker
-docker run -d -p 6379:6379 --name redis redis:latest
+For issues and questions:
+- Create an issue in the GitHub repository
+- Check the [API_GUIDE.md](./API_GUIDE.md) for API documentation
+- Review server logs in the `logs/` directory
 
-# Using local installation
-redis-server
-```
+## 🚀 Roadmap
 
-### Project Phases
-
-The project is developed in phases:
-
-1. **Phase 1**: Foundation & Setup ✅ (Current)
-2. **Phase 2**: Authentication & Authorization
-3. **Phase 3**: User Management
-4. **Phase 4**: Project Management
-5. **Phase 5**: Task Management & Kanban
-6. **Phase 6**: Dashboard & Analytics
-7. **Phase 7**: Audit Trail & Logging
-8. **Phase 8**: Testing & Documentation
-9. **Phase 9**: Deployment & DevOps
-
-## Architecture Notes
-
-### Clean Architecture Benefits
-
-- **Testability**: Business logic is independent of frameworks
-- **Flexibility**: Easy to swap implementations (e.g., different DB)
-- **Maintainability**: Clear separation of concerns
-- **Scalability**: Well-organized code structure
-
-### Design Patterns Used
-
-- **Repository Pattern**: Abstract data access
-- **Dependency Injection**: Loose coupling
-- **Factory Pattern**: Object creation
-- **Service Layer**: Business logic encapsulation
-- **DTO Pattern**: Request/response transformation
-
-## Security
-
-- ✅ Password hashing with bcryptjs
-- ✅ JWT authentication with refresh tokens
-- ✅ Role-based access control (RBAC)
-- ✅ Security headers with Helmet
-- ✅ CORS configuration
-- ✅ Input validation with Joi
-- ✅ Rate limiting (Phase 2+)
-- ✅ Audit logging (Phase 7+)
-
-## Performance
-
-- ✅ Redis caching for frequently accessed data
-- ✅ MongoDB connection pooling
-- ✅ Request compression with gzip
-- ✅ Database query optimization with indexes
-- ✅ Pagination for list endpoints
-
-## Logging
-
-Winston logger with multiple transports:
-- **Console**: Development environment only
-- **Daily Rotation Files**: Error and combined logs
-- **Log Levels**: Error, Warn, Info, HTTP, Debug
-
-Logs are stored in the `logs/` directory.
-
-## Contributing
-
-1. Create a feature branch
-2. Make your changes
-3. Run tests and linting
-4. Submit a pull request
-
-## License
-
-MIT
-
-## Support
-
-For issues and questions, please create an issue in the repository.
+- [ ] WebSocket support for real-time updates
+- [ ] Email notifications
+- [ ] File attachments for tasks
+- [ ] Advanced search and filtering
+- [ ] API versioning
+- [ ] GraphQL endpoint
+- [ ] Docker deployment
+- [ ] Kubernetes configuration
+- [ ] CI/CD pipeline
+- [ ] Performance monitoring
 
 ---
 
-**Next Phase**: Phase 2 - Authentication & Authorization
+**Version**: 1.0.0  
+**Last Updated**: January 16, 2026
