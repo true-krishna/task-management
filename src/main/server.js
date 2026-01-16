@@ -58,6 +58,16 @@ class Server {
         });
       });
 
+      // Handle server errors
+      this.server.on('error', (error) => {
+        if (error.code === 'EADDRINUSE') {
+          this.logger.error(`Port ${config.port} is already in use`);
+        } else {
+          this.logger.error('Server error', { error: error.message });
+        }
+        process.exit(1);
+      });
+
       // Graceful shutdown
       process.on('SIGTERM', () => this.shutdown());
       process.on('SIGINT', () => this.shutdown());
