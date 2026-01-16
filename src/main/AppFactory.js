@@ -24,9 +24,11 @@ const errorHandlerMiddleware = require('../presentation/middlewares/errorHandler
 // Routes
 const createAuthRoutes = require('../presentation/routes/authRoutes');
 const createUserRoutes = require('../presentation/routes/userRoutes');
+const createProjectRoutes = require('../presentation/routes/projectRoutes');
 
 // Validators
 const authValidators = require('../presentation/validators/authValidators');
+const projectValidators = require('../presentation/validators/projectValidators');
 
 class AppFactory {
   static createApp({ logger, redisClient }) {
@@ -124,6 +126,18 @@ class AppFactory {
         authMiddleware: authMiddlewareInstance,
         roleMiddleware,
         validationMiddleware,
+      })
+    );
+
+    // Project Routes
+    apiRouter.use(
+      '/projects',
+      createProjectRoutes({
+        projectController: controllerFactory.getProjectController(),
+        authMiddleware: authMiddlewareInstance,
+        roleMiddleware,
+        validationMiddleware,
+        projectValidators,
       })
     );
 

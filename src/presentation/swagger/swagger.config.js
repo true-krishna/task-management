@@ -124,6 +124,10 @@ const options = {
         description: 'User management and profile endpoints',
       },
       {
+        name: 'Projects',
+        description: 'Project management endpoints',
+      },
+      {
         name: 'Health',
         description: 'API health check endpoints',
       },
