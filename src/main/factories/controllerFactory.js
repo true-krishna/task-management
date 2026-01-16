@@ -3,6 +3,7 @@
  * Creates and manages controller instances
  */
 const AuthController = require('../../presentation/controllers/AuthController');
+const UserController = require('../../presentation/controllers/UserController');
 
 class ControllerFactory {
   constructor({ useCaseFactory, logger }) {
@@ -26,6 +27,23 @@ class ControllerFactory {
       });
     }
     return this.controllers.authController;
+  }
+
+  /**
+   * Get or create UserController
+   */
+  getUserController() {
+    if (!this.controllers.userController) {
+      this.controllers.userController = new UserController({
+        getUserProfile: this.useCaseFactory.getUserProfile(),
+        updateUserProfile: this.useCaseFactory.getUpdateUserProfile(),
+        getAllUsers: this.useCaseFactory.getGetAllUsers(),
+        updateUserRole: this.useCaseFactory.getUpdateUserRole(),
+        deactivateUser: this.useCaseFactory.getDeactivateUser(),
+        logger: this.logger,
+      });
+    }
+    return this.controllers.userController;
   }
 }
 
