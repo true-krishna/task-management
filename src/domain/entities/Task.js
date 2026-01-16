@@ -8,7 +8,7 @@ class Task {
     title,
     description = '',
     projectId,
-    assignedTo = null,
+    assigneeId = null,
     status = 'not_started',
     priority = 'none',
     order = 0,
@@ -22,7 +22,7 @@ class Task {
     this.title = title;
     this.description = description;
     this.projectId = projectId;
-    this.assignedTo = assignedTo;
+    this.assigneeId = assigneeId;
     this.status = status;
     this.priority = priority;
     this.order = order;
@@ -37,7 +37,7 @@ class Task {
    * Check if task is assigned
    */
   isAssigned() {
-    return this.assignedTo !== null && this.assignedTo !== undefined;
+    return this.assigneeId !== null && this.assigneeId !== undefined;
   }
 
   /**
