@@ -29,13 +29,11 @@ class Server {
       // Initialize Redis
       const redis = RedisClient.getInstance();
       await redis.connect(this.logger);
+      const redisClient = redis.getClient();
 
-      // Create Express App
-      this.app = AppFactory.createApp();
-      this.logger.info('Express app created');
-
-      // TODO: Register routes here (Phase 2+)
-      // TODO: Register error handler middleware here
+      // Create Express App with dependencies
+      this.app = AppFactory.createApp({ logger: this.logger, redisClient });
+      this.logger.info('Express app created with authentication routes');
 
       return this.app;
     } catch (error) {
