@@ -25,6 +25,7 @@ const errorHandlerMiddleware = require('../presentation/middlewares/errorHandler
 const createAuthRoutes = require('../presentation/routes/authRoutes');
 const createUserRoutes = require('../presentation/routes/userRoutes');
 const createProjectRoutes = require('../presentation/routes/projectRoutes');
+const createTaskRoutes = require('../presentation/routes/taskRoutes');
 
 // Validators
 const authValidators = require('../presentation/validators/authValidators');
@@ -134,10 +135,22 @@ class AppFactory {
       '/projects',
       createProjectRoutes({
         projectController: controllerFactory.getProjectController(),
+        taskController: controllerFactory.getTaskController(),
         authMiddleware: authMiddlewareInstance,
         roleMiddleware,
         validationMiddleware,
         projectValidators,
+      })
+    );
+
+    // Task Routes
+    apiRouter.use(
+      '/tasks',
+      createTaskRoutes({
+        taskController: controllerFactory.getTaskController(),
+        authMiddleware: authMiddlewareInstance,
+        roleMiddleware,
+        validationMiddleware,
       })
     );
 

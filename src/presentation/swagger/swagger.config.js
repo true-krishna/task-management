@@ -128,6 +128,10 @@ const options = {
         description: 'Project management endpoints',
       },
       {
+        name: 'Tasks',
+        description: 'Task management and Kanban board endpoints',
+      },
+      {
         name: 'Health',
         description: 'API health check endpoints',
       },
