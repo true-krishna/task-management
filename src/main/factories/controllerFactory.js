@@ -4,6 +4,7 @@
  */
 const AuthController = require('../../presentation/controllers/AuthController');
 const UserController = require('../../presentation/controllers/UserController');
+const ProjectController = require('../../presentation/controllers/ProjectController');
 
 class ControllerFactory {
   constructor({ useCaseFactory, logger }) {
@@ -44,6 +45,27 @@ class ControllerFactory {
       });
     }
     return this.controllers.userController;
+  }
+
+  /**
+   * Get or create ProjectController
+   */
+  getProjectController() {
+    if (!this.controllers.projectController) {
+      this.controllers.projectController = new ProjectController({
+        createProject: this.useCaseFactory.getCreateProject(),
+        getProject: this.useCaseFactory.getGetProject(),
+        getAllProjects: this.useCaseFactory.getGetAllProjects(),
+        updateProject: this.useCaseFactory.getUpdateProject(),
+        deleteProject: this.useCaseFactory.getDeleteProject(),
+        updateProjectVisibility: this.useCaseFactory.getUpdateProjectVisibility(),
+        assignUserToProject: this.useCaseFactory.getAssignUserToProject(),
+        removeUserFromProject: this.useCaseFactory.getRemoveUserFromProject(),
+        getProjectMembers: this.useCaseFactory.getGetProjectMembers(),
+        logger: this.logger,
+      });
+    }
+    return this.controllers.projectController;
   }
 }
 
