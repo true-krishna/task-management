@@ -15,9 +15,9 @@ class CreateTask {
   }
 
   async execute(taskData, userId, userRole) {
+    const { title, description, status, priority, projectId, assigneeId, dueDate } = taskData;
+    
     try {
-      const { title, description, status, priority, projectId, assigneeId, dueDate } = taskData;
-      
       this.logger.debug('CreateTask use case executing', { title, projectId, userId });
 
       // Validate required fields

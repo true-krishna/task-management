@@ -1,5 +1,6 @@
 const NotFoundError = require('../../../domain/errors/NotFoundError');
 const AuthorizationError = require('../../../domain/errors/AuthorizationError');
+const ValidationError = require('../../../domain/errors/ValidationError');
 
 /**
  * Use Case: Update Project
