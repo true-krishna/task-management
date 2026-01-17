@@ -60,7 +60,7 @@ class TestHelper {
 
     // Stop in-memory MongoDB
     if (this.mongoServer) {
-      await mongoServer.stop();
+      await this.mongoServer.stop();
     }
   }
 
@@ -71,6 +71,38 @@ class TestHelper {
         await collections[key].deleteMany();
       }
     }
+  }
+
+  /**
+   * Helper to register and login a user (returns tokens)
+   */
+  async registerAndLogin(request, userData) {
+    // Register user
+    const registerResponse = await request(this.app)
+      .post('/api/v1/auth/register')
+      .send(userData);
+
+    if (registerResponse.status !== 201) {
+      throw new Error(`Registration failed: ${JSON.stringify(registerResponse.body)}`);
+    }
+
+    // Login to get tokens
+    const loginResponse = await request(this.app)
+      .post('/api/v1/auth/login')
+      .send({
+        email: userData.email,
+        password: userData.password,
+      });
+
+    if (loginResponse.status !== 200) {
+      throw new Error(`Login failed: ${JSON.stringify(loginResponse.body)}`);
+    }
+
+    return {
+      user: loginResponse.body.data.user,
+      accessToken: loginResponse.body.data.accessToken,
+      refreshToken: loginResponse.body.data.refreshToken,
+    };
   }
 
   getApp() {

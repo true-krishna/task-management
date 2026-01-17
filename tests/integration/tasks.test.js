@@ -24,29 +24,27 @@ describe('Task API Integration Tests', () => {
   });
 
   beforeEach(async () => {
-    // Register user
-    const registerResponse = await request(app)
-      .post('/api/v1/auth/register')
-      .send({
-        email: 'test@example.com',
-        username: 'testuser',
-        password: 'Password123!',
-      });
+    // Register and login user
+    const userData = await testHelper.registerAndLogin(request, {
+      email: 'test@example.com',
+      password: 'Password123!',
+      firstName: 'Test',
+      lastName: 'User',
+    });
 
-    accessToken = registerResponse.body.data.accessToken;
-    userId = registerResponse.body.data.user.id;
+    accessToken = userData.accessToken;
+    userId = userData.user.id;
 
-    // Register second user
-    const secondUserResponse = await request(app)
-      .post('/api/v1/auth/register')
-      .send({
-        email: 'user2@example.com',
-        username: 'user2',
-        password: 'Password123!',
-      });
+    // Register and login second user
+    const secondUserData = await testHelper.registerAndLogin(request, {
+      email: 'user2@example.com',
+      password: 'Password123!',
+      firstName: 'User',
+      lastName: 'Two',
+    });
 
-    secondUserToken = secondUserResponse.body.data.accessToken;
-    secondUserId = secondUserResponse.body.data.user.id;
+    secondUserToken = secondUserData.accessToken;
+    secondUserId = secondUserData.user.id;
 
     // Create a project
     const projectResponse = await request(app)

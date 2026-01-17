@@ -23,37 +23,42 @@ describe('User Management API Integration Tests', () => {
   });
 
   beforeEach(async () => {
-    // Register regular user
-    const userResponse = await request(app)
-      .post('/api/v1/auth/register')
-      .send({
-        email: 'user@example.com',
-        username: 'regularuser',
-        password: 'Password123!',
-        firstName: 'Regular',
-        lastName: 'User',
-      });
+    // Register and login regular user
+    const userData = await testHelper.registerAndLogin(request, {
+      email: 'user@example.com',
+      password: 'Password123!',
+      firstName: 'Regular',
+      lastName: 'User',
+    });
 
-    userToken = userResponse.body.data.accessToken;
-    userId = userResponse.body.data.user.id;
+    userToken = userData.accessToken;
+    userId = userData.user.id;
 
     // Register admin user
-    const adminResponse = await request(app)
+    const adminRegisterResponse = await request(app)
       .post('/api/v1/auth/register')
       .send({
         email: 'admin@example.com',
-        username: 'adminuser',
         password: 'Password123!',
         firstName: 'Admin',
         lastName: 'User',
       });
 
-    adminToken = adminResponse.body.data.accessToken;
-    adminId = adminResponse.body.data.user.id;
+    adminId = adminRegisterResponse.body.data.id;
 
     // Update admin role manually in database
     const UserModel = require('../../src/infrastructure/database/mongoose/models/UserModel');
     await UserModel.findByIdAndUpdate(adminId, { role: 'admin' });
+
+    // Login as admin to get token
+    const adminLoginResponse = await request(app)
+      .post('/api/v1/auth/login')
+      .send({
+        email: 'admin@example.com',
+        password: 'Password123!',
+      });
+
+    adminToken = adminLoginResponse.body.data.accessToken;
   });
 
   afterEach(async () => {

@@ -24,32 +24,26 @@ describe('Project API Integration Tests', () => {
 
   beforeEach(async () => {
     // Register and login a user before each test
-    const registerResponse = await request(app)
-      .post('/api/v1/auth/register')
-      .send({
-        email: 'test@example.com',
-        username: 'testuser',
-        password: 'Password123!',
-        firstName: 'Test',
-        lastName: 'User',
-      });
+    const userData = await testHelper.registerAndLogin(request, {
+      email: 'test@example.com',
+      password: 'Password123!',
+      firstName: 'Test',
+      lastName: 'User',
+    });
 
-    accessToken = registerResponse.body.data.accessToken;
-    userId = registerResponse.body.data.user.id;
+    accessToken = userData.accessToken;
+    userId = userData.user.id;
 
-    // Register second user for member tests
-    const secondUserResponse = await request(app)
-      .post('/api/v1/auth/register')
-      .send({
-        email: 'user2@example.com',
-        username: 'user2',
-        password: 'Password123!',
-        firstName: 'Second',
-        lastName: 'User',
-      });
+    // Register and login second user for member tests
+    const secondUserData = await testHelper.registerAndLogin(request, {
+      email: 'user2@example.com',
+      password: 'Password123!',
+      firstName: 'Second',
+      lastName: 'User',
+    });
 
-    secondUserToken = secondUserResponse.body.data.accessToken;
-    secondUserId = secondUserResponse.body.data.user.id;
+    secondUserToken = secondUserData.accessToken;
+    secondUserId = secondUserData.user.id;
   });
 
   afterEach(async () => {
