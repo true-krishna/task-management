@@ -66,6 +66,7 @@ describe('RegisterUser Use Case', () => {
 
   it('should throw ConflictError if email already exists', async () => {
     mockUserRepository.emailExists.mockResolvedValue(true);
+    mockPasswordService.validatePasswordStrength.mockReturnValue({ isValid: true });
 
     await expect(
       registerUser.execute({
