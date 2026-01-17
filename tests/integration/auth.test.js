@@ -178,7 +178,18 @@ describe('Authentication API Integration Tests', () => {
           password: 'Password123!',
           firstName: 'Refresh',
           lastName: 'User',
-        });\n\n      // Login to get refresh token\n      const loginResponse = await request(app)\n        .post('/api/v1/auth/login')\n        .send({\n          email: 'refresh@example.com',\n          password: 'Password123!',\n        });\n\n      refreshToken = loginResponse.body.data.refreshToken;\n    });
+        });
+
+      // Login to get refresh token
+      const loginResponse = await request(app)
+        .post('/api/v1/auth/login')
+        .send({
+          email: 'refresh@example.com',
+          password: 'Password123!',
+        });
+
+      refreshToken = loginResponse.body.data.refreshToken;
+    });
 
     it('should refresh tokens with valid refresh token', async () => {
       const response = await request(app)

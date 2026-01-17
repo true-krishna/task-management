@@ -65,11 +65,11 @@ describe('Project API Integration Tests', () => {
         .expect(201);
 
       expect(response.body.success).toBe(true);
-      expect(response.body.data.project).toHaveProperty('id');
-      expect(response.body.data.project.name).toBe(projectData.name);
-      expect(response.body.data.project.ownerId).toBe(userId);
-      expect(response.body.data.project.visibility).toBe('private');
-      expect(response.body.data.project.status).toBe('active');
+      expect(response.body.data).toHaveProperty('id');
+      expect(response.body.data.name).toBe(projectData.name);
+      expect(response.body.data.ownerId).toBe(userId);
+      expect(response.body.data.visibility).toBe('private');
+      expect(response.body.data.status).toBe('active');
     });
 
     it('should return 400 for missing name', async () => {
@@ -162,8 +162,8 @@ describe('Project API Integration Tests', () => {
         .expect(200);
 
       expect(response.body.success).toBe(true);
-      expect(response.body.data.project.id).toBe(projectId);
-      expect(response.body.data.project.name).toBe('Test Project');
+      expect(response.body.data.id).toBe(projectId);
+      expect(response.body.data.name).toBe('Test Project');
     });
 
     it('should return 404 for non-existent project', async () => {
@@ -211,8 +211,8 @@ describe('Project API Integration Tests', () => {
         .expect(200);
 
       expect(response.body.success).toBe(true);
-      expect(response.body.data.project.name).toBe(updates.name);
-      expect(response.body.data.project.description).toBe(updates.description);
+      expect(response.body.data.name).toBe(updates.name);
+      expect(response.body.data.description).toBe(updates.description);
     });
 
     it('should return 403 if not project owner', async () => {
@@ -283,8 +283,8 @@ describe('Project API Integration Tests', () => {
         .expect(200);
 
       expect(response.body.success).toBe(true);
-      expect(response.body.data.project.members).toHaveLength(1);
-      expect(response.body.data.project.members[0].userId).toBe(secondUserId);
+      expect(response.body.data.members).toHaveLength(1);
+      expect(response.body.data.members[0].userId).toBe(secondUserId);
     });
 
     it('should return 403 if not project owner', async () => {
@@ -323,7 +323,7 @@ describe('Project API Integration Tests', () => {
         .expect(200);
 
       expect(response.body.success).toBe(true);
-      expect(response.body.data.project.members).toHaveLength(0);
+      expect(response.body.data.members).toHaveLength(0);
     });
 
     it('should return 403 if not project owner', async () => {

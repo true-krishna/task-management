@@ -52,7 +52,7 @@ describe('Task API Integration Tests', () => {
       .set('Authorization', `Bearer ${accessToken}`)
       .send({ name: 'Test Project' });
 
-    projectId = projectResponse.body.data.project.id;
+    projectId = projectResponse.body.data.id;
   });
 
   afterEach(async () => {
@@ -76,10 +76,10 @@ describe('Task API Integration Tests', () => {
         .expect(201);
 
       expect(response.body.success).toBe(true);
-      expect(response.body.data.task).toHaveProperty('id');
-      expect(response.body.data.task.title).toBe(taskData.title);
-      expect(response.body.data.task.projectId).toBe(projectId);
-      expect(response.body.data.task.priority).toBe('high');
+      expect(response.body.data).toHaveProperty('id');
+      expect(response.body.data.title).toBe(taskData.title);
+      expect(response.body.data.projectId).toBe(projectId);
+      expect(response.body.data.priority).toBe('high');
     });
 
     it('should return 400 for missing title', async () => {
@@ -171,8 +171,8 @@ describe('Task API Integration Tests', () => {
         .expect(200);
 
       expect(response.body.success).toBe(true);
-      expect(response.body.data.task.id).toBe(taskId);
-      expect(response.body.data.task.title).toBe('Test Task');
+      expect(response.body.data.id).toBe(taskId);
+      expect(response.body.data.title).toBe('Test Task');
     });
 
     it('should return 404 for non-existent task', async () => {
@@ -212,8 +212,8 @@ describe('Task API Integration Tests', () => {
         .expect(200);
 
       expect(response.body.success).toBe(true);
-      expect(response.body.data.task.title).toBe(updates.title);
-      expect(response.body.data.task.priority).toBe(updates.priority);
+      expect(response.body.data.title).toBe(updates.title);
+      expect(response.body.data.priority).toBe(updates.priority);
     });
   });
 
@@ -237,7 +237,7 @@ describe('Task API Integration Tests', () => {
         .expect(200);
 
       expect(response.body.success).toBe(true);
-      expect(response.body.data.task.status).toBe('in_progress');
+      expect(response.body.data.status).toBe('in_progress');
     });
 
     it('should return 400 for invalid status', async () => {
@@ -271,7 +271,7 @@ describe('Task API Integration Tests', () => {
         .expect(200);
 
       expect(response.body.success).toBe(true);
-      expect(response.body.data.task.priority).toBe('high');
+      expect(response.body.data.priority).toBe('high');
     });
   });
 
@@ -295,7 +295,7 @@ describe('Task API Integration Tests', () => {
         .expect(200);
 
       expect(response.body.success).toBe(true);
-      expect(response.body.data.task.assigneeId).toBe(userId);
+      expect(response.body.data.assigneeId).toBe(userId);
     });
 
     it('should unassign task', async () => {
@@ -313,7 +313,7 @@ describe('Task API Integration Tests', () => {
         .expect(200);
 
       expect(response.body.success).toBe(true);
-      expect(response.body.data.task.assigneeId).toBeNull();
+      expect(response.body.data.assigneeId).toBeNull();
     });
   });
 
