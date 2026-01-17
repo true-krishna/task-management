@@ -102,7 +102,7 @@ describe('Task API Integration Tests', () => {
     });
   });
 
-  describe('GET /api/v1/tasks/project/:projectId', () => {
+  describe('GET /api/v1/projects/:projectId', () => {
     beforeEach(async () => {
       // Create test tasks
       await request(app)
@@ -123,7 +123,7 @@ describe('Task API Integration Tests', () => {
 
     it('should get all project tasks', async () => {
       const response = await request(app)
-        .get(`/api/v1/tasks/project/${projectId}`)
+        .get(`/api/v1/projects/${projectId}/tasks`)
         .set('Authorization', `Bearer ${accessToken}`)
         .expect(200);
 
@@ -133,7 +133,7 @@ describe('Task API Integration Tests', () => {
 
     it('should filter tasks by status', async () => {
       const response = await request(app)
-        .get(`/api/v1/tasks/project/${projectId}?status=in_progress`)
+        .get(`/api/v1/projects/${projectId}?status=in_progress`)
         .set('Authorization', `Bearer ${accessToken}`)
         .expect(200);
 
@@ -143,7 +143,7 @@ describe('Task API Integration Tests', () => {
 
     it('should filter tasks by priority', async () => {
       const response = await request(app)
-        .get(`/api/v1/tasks/project/${projectId}?priority=high`)
+        .get(`/api/v1/projects/${projectId}?priority=high`)
         .set('Authorization', `Bearer ${accessToken}`)
         .expect(200);
 
